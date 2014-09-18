@@ -15,6 +15,10 @@ set   :shared_files,  ["app/config/parameters.yml"]
 set   :shared_children,[app_path + "/logs", web_path + "/uploads", "vendor"]
 set   :use_composer,  true
 set   :update_vendors,true
-after "deploy:finalize_update", "deploy:composer_install"
+
+task :install do
+	run "sh -c 'cd #{latest_release} && curl -s http://getcomposer.org/installer | #{php_bin}'"
+	run "sh -c 'cd #{release_path} && ./composer.phar install'"
+end
 
 logger.level = Logger::MAX_LEVEL
